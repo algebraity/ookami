@@ -33,12 +33,13 @@ class Sumset():
     def rand_set(self, length=0, min_element=0, max_element=0):
         gen_set = []
         if max_element - min_element + 1 < length:
-            length = max_element - min_element + 1
+            raise(ValueError("Length higher than range of possible values."))
         while len(gen_set) < length:
             r = rand.randint(min_element, max_element)
             if not r in gen_set:
                 gen_set.append(r)
 
+        gen_set = sorted(gen_set)
         self.set = gen_set
 
     def __add__(self, other):
@@ -57,6 +58,8 @@ class Sumset():
         return Sumset(new_set)
 
     def __str__(self):
+        self.set = list(set(self.set))
+        self.set = sorted(self.set)
         return "Sumset(" + str(self.set) + ")"
 
     __repr__ = __str__
