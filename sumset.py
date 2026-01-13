@@ -7,6 +7,8 @@ class Sumset():
         if base_set == None:
             self.construct()
 
+        self.card = len(self.set)
+
     def construct(self, nums=None):
         if nums is not None:
             self.set = nums
@@ -18,11 +20,11 @@ class Sumset():
                 k = int(input("Enter k as an integer: "))
                 n = int(input("Enter n as an integer: "))
                 self.set = [k * i for i in range(1, n+1)]
-            elif choice == -1:
+            elif choice == 1:
                 current_input = ""
                 while current_input != -1:
                     current_input = int(input("\nEnter the next element of the set (or \"-1\"): "))
-                    if isinstance(current_input, int):
+                    if isinstance(current_input, int) and current_input != -1:
                         self.set.append(current_input)
 
             print("Set created.")
