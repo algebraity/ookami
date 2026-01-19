@@ -63,6 +63,17 @@ class Sumset():
         denom = len(self.set)
         return Fraction(num, denom)
 
+    @property
+    def is_arithmetic_progression(self):
+        if len(self.set) == 1:
+            return True
+        else:
+            d = self.set[1] - self.set[0]
+            for i in range(2, len(self.set)):
+                if self.set[i] - self.set[i-1] != d:
+                    return False
+            return True
+
     def __add__(self, other):
         if not isinstance(other, Sumset):
             raise(TypeError)
@@ -80,16 +91,16 @@ class Sumset():
 
     def __rmul__(self, other):
         if isinstance(other, int):
-            result = Sumset(A.set)
+            result = Sumset(self.set)
             times = other-1
             while times > 0:
-                result += A
+                result += self
                 times -= 1
             return result
 
     def __mul__(self, other):
         if isinstance(other, int):
-            new_set = A.set
+            new_set = self.set
             for i in range(0, len(new_set)):
                 new_set[i] *= other
             return Sumset(new_set)

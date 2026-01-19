@@ -24,3 +24,4 @@ if q == 0 and isinstance(s, list):
     print("S = " + str(S.set))
     print("Cardinality of S: " + str(len(S.set)))
     print("Doubling constant of S: " + str(S.doubling_constant))
+    print("Is arithmetic progression: " + str(S.is_arithmetic_progression))
