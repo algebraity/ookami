@@ -1,5 +1,17 @@
 import random as rand
 
+############################################################################################################################
+#                                                                                                                          #
+# self.set (list): The mathematical set represented by the Sumset object.                                                  #
+#                                                                                                                          #
+# self.construct(nums=None): Constructs a set, either by taking a list as input to the method, or by taking user input.    #
+# self.rand_set(length=0, min_element=0, max_element=0): Generates a random Sumset with the paramaters given.              #
+#                                                                                                                          #
+# self.__add__(): Add two Sumset objects as sumset. A + B = {a + b : a in A, b in B}.                                      #
+# self.__rmul__(): 3 * A = A + A + A                                                                                       #
+# self.__mul__(): A * 3 = {3a : a in A}                                                                                    #
+#                                                                                                                          #
+############################################################################################################################
 class Sumset():
     def __init__(self, base_set=None):
         self.set = base_set
