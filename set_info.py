@@ -27,7 +27,7 @@ if isinstance(s, list):
     S = Sumset(s)
     computed = []
     if num > 1:
-        for i in range(2, num):
+        for i in range(2, num+1):
             computed.append(i*S)
             
     print("S = " + str(S.set))
@@ -35,6 +35,6 @@ if isinstance(s, list):
     print("Doubling constant of S: " + str(S.doubling_constant))
     print("Is arithmetic progression: " + str(S.is_arithmetic_progression))
     if num > 1:
-        print("i*S for 2 <= i <= " + str(num) + ": ")
+        print("iS for 2 <= i <= " + str(num) + ": ")
         for i in range(0, len(computed)):
             print("  " + str(i+2) + "*S = " + str(computed[i]))
