@@ -2,8 +2,8 @@ import getopt, sys
 from sumset import *
 
 args = sys.argv[1:]
-options = "hsSn"
-long_options = ["Help", "set", "num"]
+options = "sSnN"
+long_options = ["set", "num"]
 
 num = 1
 try:
@@ -34,6 +34,7 @@ if isinstance(s, list):
     print("Cardinality of S: " + str(len(S.set)))
     print("Doubling constant of S: " + str(S.doubling_constant))
     print("Is arithmetic progression: " + str(S.is_arithmetic_progression))
+    print("Additive energy: " + str(S.additive_energy))
     if num > 1:
         print("iS for 2 <= i <= " + str(num) + ": ")
         for i in range(0, len(computed)):
