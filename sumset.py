@@ -7,8 +7,9 @@ from fractions import Fraction
 #                                                                                                                          #
 # self.construct(nums=None): Constructs a set, either by taking a list as input to the method, or by taking user input.    #
 # self.rand_set(length=0, min_element=0, max_element=0): Generates a random Sumset with the paramaters given.              #
-# self.doubling_constant: A property giving |A + A|/|A| as a Fraction object.                                              #
-# self.is_arithmetic_progression: A property returning True if the Sumset object is an arithmetic progression, False o/w.  #
+# self.doubling_constant: property giving |A + A|/|A| as a Fraction object.                                                #
+# self.is_arithmetic_progression: property returning True if the Sumset object is an arithmetic progression, False o/w.    #
+# self.additive_energy: property returning the additive energy E(A) of a Sumset object                                     #
 #                                                                                                                          #
 # self.__add__(): Add two Sumset objects as sumset. A + B = {a + b : a in A, b in B}.                                      #
 # self.__rmul__(): 3 * A = A + A + A                                                                                       #
@@ -75,6 +76,21 @@ class Sumset():
                     return False
             return True
 
+    @property
+    def additive_energy(self):
+        r_vals = {}
+        for a in self:
+            for b in self:
+                if a + b in r_vals.keys():
+                    r_vals[a + b] += 1
+                else:
+                    r_vals[a + b] = 1
+        energy = 0
+        for r in r_vals:
+            energy += r_vals[r]**2
+
+        return energy
+
     def __add__(self, other):
         if not isinstance(other, Sumset):
             raise(TypeError)
@@ -110,5 +126,8 @@ class Sumset():
         self.set = list(set(self.set))
         self.set = sorted(self.set)
         return "Sumset(" + str(self.set) + ")"
+
+    def __iter__(self):
+        return iter(self.set)
 
     __repr__ = __str__
