@@ -18,6 +18,8 @@ from fractions import Fraction
 # self.density: property giving |A|/(maxA - minA + 1)                                                                       #
 # self.ads: property returning A+A, caching it if not yet computed and reading from self.add_cache otherwise                #
 # self.mds: property returning A*A, caching it if not yet computed and reading from self.mult_cache otherwise               #
+# self.ads_cardinality: property giving |A+A|                                                                               #
+# self.mds_cardinality: property giving |A*A|                                                                               #
 # self.doubling_constant: property giving |A + A|/|A| as a Fraction object.                                                 #
 # self.is_arithmetic_progression: property returning True if the Sumset object is an arithmetic progression, False o/w.     #
 # self.is_geometric_progression: property returning True if the Sumset object is a geometric progression, False o/w.        #
@@ -118,6 +120,14 @@ class Sumset():
         if not 2 in self.add_cache:
             self.add_cache[2] = 2*A
         return self.add_cache[2]
+
+    @property
+    def ads_cardinality(self):
+        return len((self.ads).set)
+
+    @property
+    def mds_cardinality(self):
+        return len((self.mds).set)
 
     @property
     def mds(self):
@@ -249,7 +259,8 @@ class Sumset():
                 current *= self
                 n -= 1
 
-            return current
+            self.mult_cache[other] = current
+            return self.mult_cache[other]
 
     def __str__(self):
         self.set = list(set(self.set))
