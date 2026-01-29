@@ -1,18 +1,25 @@
 # Sumset Computations
 
 The purpose of this project is to provide a set of tools that can be used for computations with
-subsets of the natural numbers in additive combinatorics. The project is entirely Python-based, 
-and no additional dependencies are required.
+subsets of the natural numbers in additive combinatorics. It is designed with my own reserach goals
+in mind, and is well-documented so that others may use it for their own work. The project is 
+entirely Python-based, and no additional dependencies are required.
 
 ## Features
 * Represent a finite set of non-negative integers with a `Sumset` object
 * Form sumsets: `A + B = {a + b; a in A, b in B}`
+* Translation by a constant: `A.translate(x) = {a + x : a in A}`
 * Repeated addition with self: `n*A = A + A + ... + A`
 * Scalar dilation: `A*n = {n*a : a in A}`
 * Compute invariants of a set
+  * Cardnality: `Sumset.cardinality`
+  * Diameter: `Sumset.diameter`
+  * Density: `Sumset.density`
   * Doubling constant: `Sumset.doubling_constant`
   * Is AP (True/False): `Sumset.is_arithmetic_progression`
+  * Is GP (True/False): `Sumset.is_geometric_progression`
   * Ordered additive energy: `Sumset.additive_energy`
+  * Multiplicative energy: `Sumset.multiplicate_energy`
 
 ## Repository layout
 * `sumset.py`: Sumset class implementation
@@ -36,6 +43,7 @@ A + B                              # Sumset([2, 3, 4, 6, 7, 8])
 
 A.doubling_constant                # Fraction(5, 3)
 A.is_arithmetic_progression        # True
+A.is_geometric_progression         # False
 A.additive_energy                  # 19
 ```
 Output of `set_info.py` program
@@ -43,9 +51,13 @@ Output of `set_info.py` program
 [algebraity@T460 sumset-computations]$ python3 set_info.py -s "1 2 3 4 5" -n 5
 S = [1, 2, 3, 4, 5]
 Cardinality of S: 5
+Diameter of S: 4
+Density of S: 1.0
 Doubling constant of S: 9/5
 Is arithmetic progression: True
+Is geometric progression: False
 Additive energy: 85
+Multiplicative energy: 49
 iS for 2 <= i <= 5: 
   2*S = Sumset([2, 3, 4, 5, 6, 7, 8, 9, 10])
   3*S = Sumset([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
