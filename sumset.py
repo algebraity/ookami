@@ -3,7 +3,9 @@ from fractions import Fraction
 
 #############################################################################################################################
 #                                                                                                                           #
-# self.set (list): The mathematical set represented by the Sumset object.                                                   #
+# self.set (list): the mathematical set represented by the Sumset object                                                    #
+# self.add_cache (dict): a cache storing computed values of i*A                                                             #
+# self.mult_cache (dict): a cache storing computed values of A**i                                                           #
 #                                                                                                                           #
 # self.construct(nums=None): constructs a set, either by taking a list as input to the method, or by taking user input.     #
 # self.translate(n): translates the set A by n, returning A + {n} = {a + n : a in A}                                        #
@@ -14,6 +16,8 @@ from fractions import Fraction
 # self.cardinality: property representing |A|                                                                               #
 # self.diameter: property giving the diameter of A                                                                          #
 # self.density: property giving |A|/(maxA - minA + 1)                                                                       #
+# self.ads: property returning A+A, caching it if not yet computed and reading from self.add_cache otherwise                #
+# self.mds: property returning A*A, caching it if not yet computed and reading from self.mult_cache otherwise               #
 # self.doubling_constant: property giving |A + A|/|A| as a Fraction object.                                                 #
 # self.is_arithmetic_progression: property returning True if the Sumset object is an arithmetic progression, False o/w.     #
 # self.is_geometric_progression: property returning True if the Sumset object is a geometric progression, False o/w.        #
@@ -30,6 +34,8 @@ from fractions import Fraction
 class Sumset():
     def __init__(self, base_set=None):
         self.set = base_set
+        self.add_cache = {}
+        self.mult_cache = {}
         
         if base_set is None:
             self.construct()
@@ -77,8 +83,8 @@ class Sumset():
         self.set = gen_set
 
     def info(self, n=-1):
-        self_sum = self + self
-        self_prod = self * self
+        self_sum = self.ads
+        self_prod = self.mds
         card = self.cardinality
         diam = self.diameter
         densty = self.density
@@ -91,11 +97,9 @@ class Sumset():
             sum_list = []
             for i in range(2, n+1):
                 sum_list.append(i*self)
-            return {"additive_doubling_set" : self_sum, "mult_doubling_set": self_prod, "cardinality": card, "diameter": diam, "density": densty, "dc": dc, "is_ap": is_ap, "is_gp": is_gp, "additive_energy": ae, "mult_energy": me, "i*A_list": sum_list}
+            return {"add_ds" : self_sum, "mult_ds": self_prod, "cardinality": card, "diameter": diam, "density": densty, "dc": dc, "is_ap": is_ap, "is_gp": is_gp, "additive_energy": ae, "mult_energy": me, "i*A_list": sum_list}
 
         return {"additive_doubling_set" : self_sum, "mult_doubling_set": self_prod, "cardinality": card, "diameter": diam, "density": densty, "dc": dc, "is_ap": is_ap, "is_gp": is_gp, "additive_energy": ae, "mult_energy": me}
-
-
 
     @property
     def cardinality(self):
@@ -110,9 +114,20 @@ class Sumset():
         return self.cardinality / (self.set[-1] - self.set[0] + 1)
 
     @property
+    def ads(self):
+        if not 2 in self.add_cache:
+            self.add_cache[2] = 2*A
+        return self.add_cache[2]
+
+    @property
+    def mds(self):
+        if not 2 in self.mult_cache:
+            self.mult_cache[2] = A**2
+        return self.mult_cache[2]
+
+    @property
     def doubling_constant(self):
-        ApA = self + self
-        num = len(ApA.set)
+        num = len((self.ads).set)
         denom = len(self.set)
         return Fraction(num, denom)
 
@@ -170,8 +185,12 @@ class Sumset():
 
     def __add__(self, other):
         if not isinstance(other, Sumset):
+            if isinstance(other, int):
+                return self.translate(other)
             raise(TypeError)
-
+        if other == self:
+            if 2 in self.add_cache:
+                return self.add_cache[2]
         new_set = []
         for a in self.set:
             for b in other.set:
@@ -185,11 +204,14 @@ class Sumset():
 
     def __rmul__(self, other):
         if isinstance(other, int):
+            if other in self.add_cache:
+                return self.add_cache[other]
             result = Sumset(self.set)
             times = other-1
             while times > 0:
                 result += self
                 times -= 1
+            self.add_cache[other] = result
             return result
         if isinstance(other, Sumset):
             prod_set = []
@@ -219,6 +241,8 @@ class Sumset():
 
     def __pow__(self, other):
         if isinstance(other, int):
+            if other in self.mult_cache:
+                return self.mult_cache[other]
             current = Sumset(self.set)
             n = other
             while n > 1:
