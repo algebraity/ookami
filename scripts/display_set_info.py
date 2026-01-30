@@ -1,5 +1,5 @@
 import getopt, sys
-from .combset import CombSet
+from ookami import CombSet
 
 args = sys.argv[1:]
 options = "sSnN"
