@@ -3,7 +3,7 @@ from fractions import Fraction
 
 #############################################################################################################################
 #                                                                                                                           #
-# SUMSET CLASS -- v0.1.1 (Alpha)                                                                                            #
+# PRE-PRE RELEASE -- v0.0.1 (Pre-alpha)                                                                                     #
 #                                                                                                                           #
 # An implementation of methods and properties applicable to a subset of the integers Z, along with methods of               #
 # constructing them. Suitable for research in additive and multiplicative combinatorics on subsets of Z.                    #
