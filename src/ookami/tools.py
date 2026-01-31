@@ -97,7 +97,7 @@ def _export_powerset_info(n, out_dir, jobs, k, flush_every, mp_context="fork"):
     except ValueError:
         ctx = mp.get_context()
 
-    tasks = [WorkerTask(i, n, k, flush_every, out_dir) for i in range(k)]
+    tasks = [WorkerTask(i, n, k*jobs, flush_every, out_dir) for i in range(k*jobs)]
 
     with ctx.Pool(processes=jobs) as pool:
         done = 0
