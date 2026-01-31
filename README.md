@@ -1,6 +1,6 @@
 ![OOKAMI logo](https://media.discordapp.net/attachments/1416510086024663080/1466854379360354418/ookami.png?ex=697e4218&is=697cf098&hm=f4986fb7364763ffec24bfc38389323c113e767c8f365e0e1a15bdd86e8cb430&=&format=webp&quality=lossless&width=1316&height=482)
 
-# OOKAMI - v1.0.0
+# OOKAMI - v1.1.0
 
 The purpose of this project is to provide a set of tools that can be used for computations with
 subsets of the integers in additive and multiplicative combinatorics. It is designed with my own research goals
@@ -8,7 +8,9 @@ in mind, and thus it may not meet the needs of other projects exactly, but it is
 others may use it for their own work. The project is entirely Python-based; see [Dependencies](https://github.com/algebraity/ookami?tab=readme-ov-file#dependencies) for a list of all dependencies.
 
 OOKAMI is under active development. While its core functionality is stable, the API may evolve, and users are recommended to consult the source before using it for production work. While this 
-README file provides basic descriptions and demonstrations of OOKAMI's features, full documentation is available under the `docs` directory, which is included in every release.
+README file provides basic descriptions and demonstrations of OOKAMI's features, full documentation is available within the `docs` directory, which is included in every release.
+
+For questions about licensing, see [License and attribution](https://github.com/algebraity/ookami#license-and-attribution).
 
 ## Dependencies
 
@@ -60,7 +62,7 @@ For documentation on what OOKAMI includes and how to use it, read the markdown f
   * Multiplicative energy: `CombSet.energy_mult`
 * Return invariants as a dictionary with `CombSet.info(n)`
 * Results of operations with a set and itself are cached for future use
-* Computational tools including computing the properties of power sets, generating random sets, and generating random sums are available through the `tools `module
+* Computational tools including computing the properties of power sets, generating random sets, and generating random sums are available through the `tools` module
   
 ## Usage examples
 
@@ -88,9 +90,9 @@ Example usage of random set generation using the `ookami.tools` module
 from ookami import tools
 
 # input: (num_sums, length, min_val, max_val)
-tools.random_sets(10, 10, 1, 100)                   # Generates 10 random sets of length 10,
-                                                    # containing integers from 1 to 100 and
-                                                    # returns them as a list
+tools.random_sets(10, 10, 1, 100)
+# Generates 10 random sets of length 10, containing integers from 1 to 100 and
+# returns them as a list
 
 # input: (num_sums, length1, length2, min1, min2, max1, max2)
 tools.random_sums(10, 10, 10, 1, 1, 100, 100)           
