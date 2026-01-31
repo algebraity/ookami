@@ -1,5 +1,4 @@
 from .combset import CombSet
-from .random_sums import gen_random_sums
-from .powerset_export import compute_powerset_info
+from .tools import compute_powerset_info, rand_sums, rand_sets
 
-__all__ = ["CombSet", "gen_random_sums", "compute_powerset_info"]
+__all__ = ["CombSet", "compute_powerset_info", "rand_sums", "rand_sets"]

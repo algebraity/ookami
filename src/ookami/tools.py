@@ -76,7 +76,7 @@ def _worker(task: WorkerTask) -> str:
     return path
 
 
-def export_powerset_info(*, n, out_dir, jobs, k, flush_every, mp_context="fork"):
+def export_powerset_info(n, out_dir, jobs, k, flush_every, mp_context="fork"):
 
     if n < 1:
         raise ValueError("n must be >= 1")
@@ -106,7 +106,22 @@ def export_powerset_info(*, n, out_dir, jobs, k, flush_every, mp_context="fork")
 
 compute_powerset_info = export_powerset_info
 
-if __name__ == "__main__":
-    # Example invocation; users must explicitly specify values.
-    export_powerset_info(n=20, out_dir="data", jobs=mp.cpu_count(), k=10 * mp.cpu_count(), flush_every=8000)
+def rand_sums(num_sums, length1, length2, min1, min2, max1, max2):
+    results = []
+    for _ in range(0, num_sums):
+        S1 = CombSet([])
+        S2 = CombSet([])
+        S1.rand_set(length=length1, min_element=min1, max_element=max1)
+        S2.rand_set(length=length2, min_element=min2, max_element=max2)
+
+        results.append((S1, S2, S1 + S2))
+
+    return(results)
+
+def rand_sets(num_sets, length, min_val, max_val):
+    sets = []
+    for i in range(0, num_sets):
+        sets.append(CombSet([0]).rand_set(length, min_val, max_val))
+
+    return sets
 
