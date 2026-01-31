@@ -103,7 +103,7 @@ def _export_powerset_info(n, out_dir, jobs, k, flush_every, mp_context="fork"):
         done = 0
         for path in pool.imap_unordered(_worker, tasks, chunksize=1):
             done += 1
-            print(f"{(100*done)//k}% done, wrote {path}, {time.time()-t0:.1f}s since start")
+            print(f"{(100*done)//(k*jobs)}% done, wrote {path}, {time.time()-t0:.1f}s since start")
 
 compute_powerset_info = _export_powerset_info
 
