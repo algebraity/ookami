@@ -1,4 +1,4 @@
-![OOKAMI logo](https://media.discordapp.net/attachments/1416510086024663080/1466854379360354418/ookami.png?ex=697e4218&is=697cf098&hm=f4986fb7364763ffec24bfc38389323c113e767c8f365e0e1a15bdd86e8cb430&=&format=webp&quality=lossless&width=1316&height=482)
+![OOKAMI logo](https://github.com/algebraity/ookami/blob/main/ookami.png)
 
 # OOKAMI - v1.1.1
 
