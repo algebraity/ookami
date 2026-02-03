@@ -5,7 +5,7 @@
 The purpose of this project is to provide a set of tools that can be used for computations with
 subsets of the integers in additive and multiplicative combinatorics. It is designed with my own research goals
 in mind, and thus it may not meet the needs of other projects exactly, but it is well-documented so that 
-others may use it for their own work. The project is entirely Python-based, using NumPy for efficient computations; see [Dependencies](https://github.com/algebraity/ookami?tab=readme-ov-file#dependencies) for a list of all dependencies. Full documentation is available within the `docs` directory, which is included in every release.
+others may use it for their own work. The project is implemented in Python, using NumPy for efficient computations; see [Dependencies](https://github.com/algebraity/ookami?tab=readme-ov-file#dependencies) for a list of all dependencies. Full documentation is available within the `docs` directory, which is included in every release.
 
 As of v1.2.0, I consider OOKAMI complete in the sense that there are no more features or optimizations I intend to add to it for now. I will still push minor releases (e.g. v1.2.x) if patches are necessary to fix bugs or improve basic functioning, but for now I am satisfied with the project. If you find a bug or would like to see a feature added, please raise an issue or message me. Of course, since OOKAMI is open source, you may clone this repository and implement a feature if you prefer.
 
@@ -39,12 +39,12 @@ For documentation on what OOKAMI includes and how to use it, read the markdown f
 ## Features
 * Represent a finite set of integers with a `CombSet` object
 * Manipulate the underlying set `CombSet._set` through operations `CombSet.add(x)` and `CombSet.remove(x)` (direct manipulation of CombSet._set is not supported)
-* Sets and operations on them are implemented via NumPy, giving huge performance advantages over pure Python
+* Sets and operations on them are implemented via NumPy, giving significant performance advantages over pure Python
 * Form sumsets: `A + B = {a + b; a in A, b in B}`
 * Translation by a constant: `A.translate(x) = {a + x : a in A}`
 * Repeated addition with self: `n*A = A + A + ... + A`
 * Scalar dilation: `A*n = {n*a : a in A}`
-* Representation function: `CombSet.rep_add(k=2, x)`, `CombSet.rep_diff(k=2, x)`, `CombSet.rep_mult(k=2, x)`
+* Representation function: `CombSet.rep_add(x, k=2)`, `CombSet.rep_diff(x, k=2)`, `CombSet.rep_mult(x, k=2)`
 * Compute invariants of a set
   * Cardinality: `CombSet.cardinality`
   * Diameter: `CombSet.diameter`
@@ -81,7 +81,7 @@ A + B                              # CombSet([2, 3, 4, 6, 7, 8])
 A.doubling_constant                # Fraction(5, 3)
 A.is_arithmetic_progression        # True
 A.is_geometric_progression         # False
-A.energy_add                  # 19
+A.energy_add                       # 19
 
 A.info()                           # {'add_ds': CombSet([2, 3, 4, 5, 6]), 'diff_ds': CombSet([-2, -1, 0, 1, 2]), 'mult_ds': CombSet([1, 2, 3, 4, 6, 9]), 'cardinality': 3, 'diameter': 2, 'density': Fraction(1, 1), 'dc': Fraction(5, 3), 'is_ap': True, 'is_gp': False, 'add_energy': 19, 'mult_energy': 15}
 A.info(3)                          # {'add_ds': CombSet([2, 3, 4, 5, 6]), 'diff_ds': CombSet([-2, -1, 0, 1, 2]), 'mult_ds': CombSet([1, 2, 3, 4, 6, 9]), 'cardinality': 3, 'diameter': 2, 'density': Fraction(1, 1), 'dc': Fraction(5, 3), 'is_ap': True, 'is_gp': False, 'add_energy': 19, 'mult_energy': 15, 'i*A_list': [CombSet([2, 3, 4, 5, 6]), CombSet([3, 4, 5, 6, 7, 8, 9])]}
