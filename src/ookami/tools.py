@@ -25,7 +25,7 @@ def _compute_row(subset: tuple[int, ...]) -> list:
     S = CombSet(subset)
     info = S.info()
     return [
-        json.dumps(list(S._set)),
+        json.dumps(S._set.tolist()),
         info["add_ds"].cardinality,
         info["diff_ds"].cardinality,
         info["mult_ds"].cardinality,
@@ -42,7 +42,7 @@ def _compute_row(subset: tuple[int, ...]) -> list:
 def _compute_row_min(subset: tuple[int, ...]) -> list:
     S = CombSet(subset)
     return [
-        json.dumps(list(S._set)),
+        json.dumps(S._set.tolist()),
         (S.ads).cardinality,
         (S.mds).cardinality
     ]
