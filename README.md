@@ -45,7 +45,7 @@ For documentation on what OOKAMI includes and how to use it, read the markdown f
 * Translation by a constant: `A.translate(x) = {a + x : a in A}`
 * Repeated addition with self: `n*A = A + A + ... + A`
 * Scalar dilation: `A*n = {n*a : a in A}`
-* Compute additive, difference, and multiplicative representation functions
+* Representation function: `CombSet.rep_add(k=2, x)`, `CombSet.rep_diff(k=2, x)`, `CombSet.rep_mult(k=2, x)`
 * Compute invariants of a set
   * Cardinality: `CombSet.cardinality`
   * Diameter: `CombSet.diameter`
