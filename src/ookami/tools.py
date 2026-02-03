@@ -1,11 +1,10 @@
 import os
 import csv
-import json
 import time
 import multiprocessing as mp
 from dataclasses import dataclass
 from ookami import CombSet
-
+from typing import Any, List, Tuple
 
 HEADER = [
     "set", "add_ds_card", "diff_ds_card", "mult_ds_card",
@@ -13,16 +12,20 @@ HEADER = [
     "is_ap", "is_gp", "add_energy", "mult_energy"
 ]
 
+MIN_HEADER = [
+    "set", "add_ds_card", "mult_ds_card"
+]
+
 
 def _mask_to_subset(mask: int, n: int) -> tuple[int, ...]:
     return tuple(i + 1 for i in range(n) if (mask >> i) & 1)
 
 
-def _compute_row(subset: tuple[int, ...]) -> list:
+def _compute_row(subset: tuple[int, ...], mask: int) -> List[Any]:
     S = CombSet(subset)
     info = S.info()
     return [
-        json.dumps(S._set),
+        mask,
         info["add_ds"].cardinality,
         info["diff_ds"].cardinality,
         info["mult_ds"].cardinality,
@@ -36,6 +39,13 @@ def _compute_row(subset: tuple[int, ...]) -> list:
         info["mult_energy"],
     ]
 
+def _compute_row_min(subset: tuple[int, ...], mask: int) -> List[Any]:
+    S = CombSet(subset)
+    return [
+        mask,
+        (S.ads).cardinality,
+        (S.mds).cardinality
+    ]
 
 @dataclass(frozen=True)
 class WorkerTask:
@@ -44,6 +54,7 @@ class WorkerTask:
     k: int
     flush_every: int
     out_dir: str
+    minimal: bool
 
 
 def _worker(task: WorkerTask) -> str:
@@ -57,14 +68,19 @@ def _worker(task: WorkerTask) -> str:
 
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(HEADER)
+        if task.minimal:
+            w.writerow(MIN_HEADER)
+            to_call = _compute_row_min
+        else:
+            w.writerow(HEADER)
+            to_call = _compute_row
 
         buf: list[list] = []
         for mask in range(chunk_id, total, k):
             if mask == 0:
                 continue
             subset = _mask_to_subset(mask, n)
-            buf.append(_compute_row(subset))
+            buf.append(to_call(subset, mask))
 
             if len(buf) >= flush_every:
                 w.writerows(buf)
@@ -77,8 +93,7 @@ def _worker(task: WorkerTask) -> str:
     return path
 
 
-def _export_powerset_info(n, out_dir, jobs, k, flush_every, mp_context="fork"):
-
+def _export_powerset_info(n: int, out_dir: str, jobs: int, k: int, flush_every: int, min_computation: bool = False, mp_context: str = "fork") -> None:
     if n < 1:
         raise ValueError("n must be >= 1")
     if jobs < 1:
@@ -97,7 +112,7 @@ def _export_powerset_info(n, out_dir, jobs, k, flush_every, mp_context="fork"):
     except ValueError:
         ctx = mp.get_context()
 
-    tasks = [WorkerTask(i, n, k*jobs, flush_every, out_dir) for i in range(k*jobs)]
+    tasks = [WorkerTask(i, n, k*jobs, flush_every, out_dir, min_computation) for i in range(k*jobs)]
 
     with ctx.Pool(processes=jobs) as pool:
         done = 0
@@ -107,7 +122,7 @@ def _export_powerset_info(n, out_dir, jobs, k, flush_every, mp_context="fork"):
 
 compute_powerset_info = _export_powerset_info
 
-def rand_sums(num_sums, length1, length2, min1, min2, max1, max2):
+def rand_sums(num_sums: int, length1: int, length2: int, min1: int, min2: int, max1: int, max2: int) -> List[Tuple[CombSet, CombSet, CombSet]]:
     results = []
     for _ in range(0, num_sums):
         S1 = CombSet([0])
@@ -119,8 +134,8 @@ def rand_sums(num_sums, length1, length2, min1, min2, max1, max2):
 
     return(results)
 
-def rand_sets(num_sets, length, min_val, max_val):
-    sets = []
+def rand_sets(num_sets: int, length: int, min_val: int, max_val: int) -> List[CombSet]:
+    sets: List[CombSet] = []
     for i in range(0, num_sets):
         S = CombSet([0])
         S.rand_set(length, min_val, max_val)

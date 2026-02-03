@@ -1,11 +1,11 @@
 ![OOKAMI logo](https://github.com/algebraity/ookami/blob/main/ookami.png)
 
-# OOKAMI - v1.1.1
+# OOKAMI - v1.2.0
 
 The purpose of this project is to provide a set of tools that can be used for computations with
 subsets of the integers in additive and multiplicative combinatorics. It is designed with my own research goals
 in mind, and thus it may not meet the needs of other projects exactly, but it is well-documented so that 
-others may use it for their own work. The project is entirely Python-based; see [Dependencies](https://github.com/algebraity/ookami?tab=readme-ov-file#dependencies) for a list of all dependencies.
+others may use it for their own work. The project is entirely Python-based, using NumPy for efficient computations; see [Dependencies](https://github.com/algebraity/ookami?tab=readme-ov-file#dependencies) for a list of all dependencies.
 
 OOKAMI is under active development. While its core functionality is stable, the API may evolve, and users are recommended to consult the source before using it for production work. While this 
 README file provides basic descriptions and demonstrations of OOKAMI's features, full documentation is available within the `docs` directory, which is included in every release.
@@ -14,7 +14,7 @@ For questions about licensing, see [License and attribution](https://github.com/
 
 ## Dependencies
 
-The `ookami.combset` module requires only the `random` and `fractions` packages by default, while `ookami.tools` requires the `os`, `csv`, `json`, `time`, `multiprocessing`, and `dataclasses` packages. These packages are all a part of the Python standard library, so having a recent version of Python3 installed should be enough to run OOKAMI.
+The `ookami.combset` module requires the `random`, `fractions`, `typing`, and `numpy` packages by default, while `ookami.tools` requires the `typing`, `os`, `csv`, `time`, `multiprocessing`, and `dataclasses` packages. All of these packages, except for NumPy, are a part of the Python standard library, so having a recent version of Python3 installed in addition to the NumPy package should be enough to run OOKAMI.
 
 ## Installation
 
@@ -40,11 +40,12 @@ For documentation on what OOKAMI includes and how to use it, read the markdown f
 ## Features
 * Represent a finite set of integers with a `CombSet` object
 * Manipulate the underlying set `CombSet._set` through operations `CombSet.add(x)` and `CombSet.remove(x)` (direct manipulation of CombSet._set is not supported)
+* Sets and operations on them are implemented via NumPy, giving huge performance advantages over pure Python
 * Form sumsets: `A + B = {a + b; a in A, b in B}`
 * Translation by a constant: `A.translate(x) = {a + x : a in A}`
 * Repeated addition with self: `n*A = A + A + ... + A`
 * Scalar dilation: `A*n = {n*a : a in A}`
-* Compute additive, difference, and multiplicative representation functions
+* Representation function: `CombSet.rep_add(k=2, x)`, `CombSet.rep_diff(k=2, x)`, `CombSet.rep_mult(k=2, x)`
 * Compute invariants of a set
   * Cardinality: `CombSet.cardinality`
   * Diameter: `CombSet.diameter`
@@ -60,6 +61,7 @@ For documentation on what OOKAMI includes and how to use it, read the markdown f
   * Is GP (True/False): `CombSet.is_geometric_progression`
   * Ordered additive energy: `CombSet.energy_add`
   * Multiplicative energy: `CombSet.energy_mult`
+  * k-fold ordered energies: `CombSet.k_energy_add(k)`, `CombSet.k_energy_diff(k)`, `CombSet.k_energy_mult(k)`
 * Return invariants as a dictionary with `CombSet.info(n)`
 * Results of operations with a set and itself are cached for future use
 * Computational tools including computing the properties of power sets, generating random sets, and generating random sums are available through the `tools` module
@@ -101,24 +103,35 @@ tools.random_sums(10, 10, 10, 1, 1, 100, 100)
 ```
 Example use of `ookami.tools.compute_powerset_info`
 ```bash
-[algebraity@T460 ~]$ python3 -i
+[algebraity@T460 ookami]$ python3 -i
 Python 3.14.2 (main, Jan  2 2026, 14:27:39) [GCC 15.2.1 20251112] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from ookami import *
->>> compute_powerset_info(15, "data", 4, 5, 4000)   # input: (n, out_dir, jobs, k, buffer_size)
-20% done, wrote data/set_info_15_0003.csv, 1.0s since start
-40% done, wrote data/set_info_15_0002.csv, 1.0s since start
-60% done, wrote data/set_info_15_0001.csv, 1.0s since start
-80% done, wrote data/set_info_15_0004.csv, 1.0s since start
-100% done, wrote data/set_info_15_0005.csv, 1.5s since start
+>>> compute_powerset_info(15, "data", 4, 10, 4000, False)        # input: (n, out_dir, jobs, k, buffer_size, compute_minimal);
+2% done, wrote data/set_info_15_0001.csv, 0.3s since start       # compute_minimal=True writes only S, |S+S|, and |S*S|
+5% done, wrote data/set_info_15_0002.csv, 0.3s since start
+...
+100% done, wrote data/set_info_15_0040.csv, 3.1s since start
+>>> compute_powerset_info(15, "data-min", 4, 10, 4000, True)   
+2% done, wrote data-min/set_info_15_0001.csv, 0.1s since start
+5% done, wrote data-min/set_info_15_0002.csv, 0.1s since start
+...
+100% done, wrote data-min/set_info_15_0040.csv, 1.1s since start
 >>> 
-[algebraity@T460 ~]$ head data/set_info_15_0001.csv  -n 6
+[algebraity@T460 ookami]$ head data/set_info_15_0001.csv -n 6
 set,add_ds_card,diff_ds_card,mult_ds_card,set_cardinality,diameter,density,dc,is_ap,is_gp,add_energy,mult_energy
-"[1, 3]",3,3,3,2,2,2/3,3/2,True,True,6,6
-"[2, 4]",3,3,3,2,2,2/3,3/2,True,True,6,6
-"[1, 2, 3, 4]",7,7,9,4,3,1,7/4,True,False,44,32
-"[3, 5]",3,3,3,2,2,2/3,3/2,True,True,6,6
-"[1, 4, 5]",6,7,6,3,4,3/5,2,False,False,15,15
+40,3,3,3,2,2,2/3,3/2,True,True,6,6
+80,3,3,3,2,2,2/3,3/2,True,True,6,6
+120,7,7,10,4,3,1,7/4,True,False,44,28
+160,3,3,3,2,2,2/3,3/2,True,True,6,6
+200,6,7,6,3,4,3/5,2,False,False,15,15
+[algebraity@T460 ookami]$ head data-min/set_info_15_0001.csv -n 6
+set,add_ds_card,mult_ds_card
+40,3,3
+80,3,3
+120,7,10
+160,3,3
+200,6,6
 # output: specific information about each (non-empty) subset of [15], split into up to k*jobs files
 ```
 

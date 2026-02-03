@@ -30,7 +30,7 @@ if isinstance(s, list):
         for i in range(2, num+1):
             computed.append(i*S)
             
-    print("S = " + str(S._set))
+    print("S = " + str(list(S._set)))
     print("Cardinality of S: " + str(S.cardinality))
     print("Diameter of S: " + str(S.diameter))
     print("Density of S: " + str(S.density))

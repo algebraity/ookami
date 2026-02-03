@@ -14,10 +14,11 @@ The `tools` module depends on the following standard-library modules:
 
 - `os`
 - `csv`
-- `json`
 - `time`
 - `multiprocessing`
 - `dataclasses`
+- `typing` (used for type annotations)
+- `numpy`
 
 It also depends on the CombSet class from the `ookami` package:
 
@@ -43,6 +44,7 @@ compute_powerset_info(
     jobs: int,
     k: int,
     flush_every: int,
+    min_computation: bool,
     mp_context: str = "fork"
 ) -> None
 ````
@@ -66,6 +68,8 @@ The computation is parallelized using Python’s multiprocessing framework and s
   Number of rows buffered before writing to disk.
 * `mp_context`
   Multiprocessing start method (e.g. `"fork"`, `"spawn"`).
+* `min_computation`
+  Whether or nor to perform a minimal vs full computation; True only writes `list(S._set)`, `(S.ads).cardinality`, and `(S.mds).cardinality`.
 
 **Output**
 
