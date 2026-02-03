@@ -93,7 +93,7 @@ def _worker(task: WorkerTask) -> str:
     return path
 
 
-def _export_powerset_info(n: int, out_dir: str, jobs: int, k: int, flush_every: int, min_computation: bool = True, mp_context: str = "fork") -> None:
+def _export_powerset_info(n: int, out_dir: str, jobs: int, k: int, flush_every: int, min_computation: bool = False, mp_context: str = "fork") -> None:
     if n < 1:
         raise ValueError("n must be >= 1")
     if jobs < 1:
