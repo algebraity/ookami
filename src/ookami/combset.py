@@ -82,7 +82,7 @@ class CombSet():
         n = np.int64(n)
         return CombSet(self._set + n)
 
-    def rep_add(self, k: int, x: int) -> int:
+    def rep_add(self, x: int, k: int = 2) -> int:
         if (k, int(x)) in self.rep_add_cache:
             return self.rep_add_cache[(k, int(x))]
 
@@ -94,7 +94,7 @@ class CombSet():
         self.rep_add_cache[(k, int(x))] = rep
         return self.rep_add_cache[(k, int(x))]
 
-    def rep_diff(self, k: int, x: int) -> int:
+    def rep_diff(self, x: int, k: int = 2) -> int:
         if (k, int(x)) in self.rep_diff_cache:
             return self.rep_diff_cache[(k, int(x))]
 
@@ -106,7 +106,7 @@ class CombSet():
         self.rep_diff_cache[(k, int(x))] = rep
         return self.rep_diff_cache[(k, int(x))]
 
-    def rep_mult(self, k: int, x: int) -> int:
+    def rep_mult(self, x: int, k: int = 2) -> int:
         if (k, int(x)) in self.rep_mult_cache:
             return self.rep_mult_cache[(k, int(x))]
 
