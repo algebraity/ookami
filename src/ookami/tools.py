@@ -1,10 +1,11 @@
 import os
 import csv
 import time
+import random as rand
 import multiprocessing as mp
 from dataclasses import dataclass
 from ookami import CombSet
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Union
 
 HEADER = [
     "set", "add_ds_card", "diff_ds_card", "mult_ds_card",
@@ -143,3 +144,89 @@ def rand_sets(num_sets: int, length: int, min_val: int, max_val: int) -> List[Co
 
     return sets
 
+def rand_ap(starts: Union[int, Tuple[int, int], List[int]], d: Union[int, Tuple[int, int], List[int]], length: Union[int, Tuple[int, int], List[int]], num_aps: int = 1) -> List[CombSet]:
+    aps: List[CombSet] = []
+
+    if num_aps < 1:
+        raise ValueError("Number of APs must be at least 1")
+
+    if isinstance(starts, int):
+        pass
+    elif isinstance(starts, (tuple, list)) and len(starts) == 2 and starts[0] <= starts[1]:
+        pass
+    else:
+        raise ValueError("starts must be an int or a (lo, hi) pair")
+
+    if isinstance(d, int):
+        if d < 1:
+            raise ValueError("Common difference must be at least 1")
+    elif isinstance(d, (tuple, list)) and len(d) == 2 and d[0] <= d[1] and d[0] >= 1:
+        pass
+    else:
+        raise ValueError("d must be an int >= 1 or a (lo, hi) pair with lo >= 1")
+
+    if isinstance(length, int):
+        if length < 1:
+            raise ValueError("length must be at least 1")
+    elif isinstance(length, (tuple, list)) and len(length) == 2 and 1 <= length[0] <= length[1]:
+        pass
+    else:
+        raise ValueError("length must be an int >= 1 or a (lo, hi) pair with lo >= 1")
+
+    starts_is_int = isinstance(starts, int)
+    d_is_int = isinstance(d, int)
+    length_is_int = isinstance(length, int)
+
+    for _ in range(num_aps):
+        ap_start = starts if starts_is_int else rand.randint(starts[0], starts[1])
+        ap_d = d if d_is_int else rand.randint(d[0], d[1])
+        ap_len = length if length_is_int else rand.randint(length[0], length[1])
+
+        aps.append(CombSet([ap_start + ap_d * i for i in range(ap_len)]))
+
+    if len(aps) == 1:
+        return aps[0]
+    return aps
+
+def rand_gp(starts: Union[int, Tuple[int, int], List[int]], r: Union[int, Tuple[int, int], List[int]], length: Union[int, Tuple[int, int], List[int]], num_gps: int = 1) -> List[CombSet]:
+    gps: List[CombSet] = []
+
+    if num_gps < 1:
+        raise ValueError("Number of GPS must be at least 1")
+    if isinstance(starts, int):
+        pass
+    elif isinstance(starts, (tuple, list)) and len(starts) == 2 and starts[0] <= starts[1]:
+        pass
+    else:
+        raise ValueError("starts must be an int or a (lo, hi) pair")
+
+    if isinstance(r, int):
+        if r < 1:
+            raise ValueError("Common ratio must be at least 1")
+    elif isinstance(r, (tuple, list)) and len(r) == 2 and isinstance(r[0], int) and isinstance(r[1], int) and r[0] <= r[1] and r[0] >= 1:
+        pass
+    else:
+        raise ValueError("r must be an int >= 1 or a (lo, hi) pair with lo >= 1")
+
+    if isinstance(length, int):
+        if length < 1:
+            raise ValueError("length must be at least 1")
+    elif isinstance(length, (tuple, list)) and len(length) == 2 and 1 <= length[0] <= length[1]:
+        pass
+    else:
+        raise ValueError("length must be an int >= 1 or a (lo, hi) pair with lo >= 1")
+
+    starts_is_int = isinstance(starts, int)
+    r_is_int = isinstance(r, int)
+    length_is_int = isinstance(length, int)
+
+    for _ in range(num_gps):
+        gp_start = starts if starts_is_int else rand.randint(starts[0], starts[1])
+        gp_r = r if r_is_int else rand.randint(r[0], r[1])
+        gp_len = length if length_is_int else rand.randint(length[0], length[1])
+
+        gps.append(CombSet([gp_start * gp_r ** i for i in range(gp_len)]))
+    
+    if len(gps) == 1:
+        return gps[0]
+    return gps

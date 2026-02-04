@@ -1,19 +1,19 @@
 ![OOKAMI logo](https://github.com/algebraity/ookami/blob/main/ookami.png)
 
-# OOKAMI - v1.2.0
+# OOKAMI - v1.2.1
 
 The purpose of this project is to provide a set of tools that can be used for computations with
 subsets of the integers in additive and multiplicative combinatorics. It is designed with my own research goals
 in mind, and thus it may not meet the needs of other projects exactly, but it is well-documented so that 
 others may use it for their own work. The project is implemented in Python, using NumPy for efficient computations; see [Dependencies](https://github.com/algebraity/ookami?tab=readme-ov-file#dependencies) for a list of all dependencies. Full documentation is available within the `docs` directory, which is included in every release.
 
-As of v1.2.0, I consider OOKAMI complete in the sense that there are no more features or optimizations I intend to add to it for now. I will still push minor releases (e.g. v1.2.x) if patches are necessary to fix bugs or improve basic functioning, but for now I am satisfied with the project. If you find a bug or would like to see a feature added, please raise an issue or message me. Of course, since OOKAMI is open source, you may clone this repository and implement a feature if you prefer.
+As of v1.2, I consider OOKAMI complete in the sense that there are no more features or optimizations I intend to add to it for now. I will still push minor releases (e.g. v1.2.x) if patches are necessary to fix bugs or improve basic functioning, but for now I am satisfied with the project. If you find a bug or would like to see a feature added, please raise an issue or message me. Of course, since OOKAMI is open source, you may clone this repository and implement a feature if you prefer.
 
 For questions about licensing, see [License and attribution](https://github.com/algebraity/ookami#license-and-attribution).
 
 ## Dependencies
 
-The `ookami.combset` module requires the `random`, `fractions`, `typing`, and `numpy` packages by default, while `ookami.tools` requires the `typing`, `os`, `csv`, `time`, `multiprocessing`, and `dataclasses` packages. All of these packages, except for NumPy, are a part of the Python standard library, so having a recent version of Python3 installed in addition to the NumPy package should be enough to run OOKAMI.
+The `ookami.combset` module requires the `random`, `fractions`, `typing`, and `numpy` packages by default, while `ookami.tools` requires also the `typing`, `os`, `csv`, `time`, `multiprocessing`, and `dataclasses` packages. All of these packages, except for NumPy, are a part of the Python standard library, so having a recent version of Python3 installed in addition to the NumPy package should be enough to run OOKAMI.
 
 ## Installation
 
@@ -63,7 +63,7 @@ For documentation on what OOKAMI includes and how to use it, read the markdown f
   * k-fold ordered energies: `CombSet.k_energy_add(k)`, `CombSet.k_energy_diff(k)`, `CombSet.k_energy_mult(k)`
 * Return invariants as a dictionary with `CombSet.info(n)`
 * Results of operations with a set and itself are cached for future use
-* Computational tools including computing the properties of power sets, generating random sets, and generating random sums are available through the `tools` module
+* Computational tools including computing the properties of power sets and generating random sets, sums, and arithmetic and geometric progressions are available through the `tools` module
   
 ## Usage examples
 
@@ -86,6 +86,7 @@ A.energy_add                       # 19
 A.info()                           # {'add_ds': CombSet([2, 3, 4, 5, 6]), 'diff_ds': CombSet([-2, -1, 0, 1, 2]), 'mult_ds': CombSet([1, 2, 3, 4, 6, 9]), 'cardinality': 3, 'diameter': 2, 'density': Fraction(1, 1), 'dc': Fraction(5, 3), 'is_ap': True, 'is_gp': False, 'add_energy': 19, 'mult_energy': 15}
 A.info(3)                          # {'add_ds': CombSet([2, 3, 4, 5, 6]), 'diff_ds': CombSet([-2, -1, 0, 1, 2]), 'mult_ds': CombSet([1, 2, 3, 4, 6, 9]), 'cardinality': 3, 'diameter': 2, 'density': Fraction(1, 1), 'dc': Fraction(5, 3), 'is_ap': True, 'is_gp': False, 'add_energy': 19, 'mult_energy': 15, 'i*A_list': [CombSet([2, 3, 4, 5, 6]), CombSet([3, 4, 5, 6, 7, 8, 9])]}
 ```
+
 Example usage of random set generation using the `ookami.tools` module
 ```python
 from ookami import tools
@@ -100,6 +101,7 @@ tools.random_sums(10, 10, 10, 1, 1, 100, 100)
 # Generates 10 random sums, each of two sets of length length1 and length2
 # respectively, with min and max elements min1, max1 and min2, max2 respectively
 ```
+
 Example use of `ookami.tools.compute_powerset_info`
 ```bash
 [algebraity@T460 ookami]$ python3 -i
@@ -132,6 +134,22 @@ set,add_ds_card,mult_ds_card
 160,3,3
 200,6,6
 # output: specific information about each (non-empty) subset of [15], split into up to k*jobs files
+```
+
+Example of generating random arithmetic and geometric progressions with `ookami.tools`
+```bash
+[algebraity@T460 ookami]$ python3 -i
+Python 3.14.2 (main, Jan  2 2026, 14:27:39) [GCC 15.2.1 20251112] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from ookami import *
+>>> rand_ap([1, 100], [2, 10], 5)
+CombSet([47, 50, 53, 56, 59])
+>>> rand_ap([1, 100], [2, 10], 5, 3)
+[CombSet([71, 79, 87, 95, 103]), CombSet([71, 78, 85, 92, 99]), CombSet([30, 36, 42, 48, 54])]
+>>> rand_gp([1, 100], [2, 10], 5)
+CombSet([73, 146, 292, 584, 1168])
+>>> rand_gp([1, 100], [2, 10], 5, 3)
+[CombSet([25, 100, 400, 1600, 6400]), CombSet([30, 210, 1470, 10290, 72030]), CombSet([80, 800, 8000, 80000, 800000])]
 ```
 
 Example of `set_information.py` script

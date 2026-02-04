@@ -15,9 +15,10 @@ The `tools` module depends on the following standard-library modules:
 - `os`
 - `csv`
 - `time`
+- `random`
 - `multiprocessing`
 - `dataclasses`
-- `typing` (used for type annotations)
+- `typing`
 - `numpy`
 
 It also depends on the CombSet class from the `ookami` package:
@@ -166,6 +167,98 @@ sums = tools.rand_sums(10, 10, 10, 1, 1, 100, 100)
 ```
 
 ---
+
+#### `rand_ap`
+
+```python
+rand_ap(
+    starts: int | tuple[int, int] | list[int],
+    d: int | tuple[int, int] | list[int],
+    length: int | tuple[int, int] | list[int],
+    num_aps: int = 1
+) -> CombSet | list[CombSet]
+```
+
+Generate random arithmetic progressions (APs) as `CombSet` objects.
+
+**Parameters**
+
+* `starts`
+  Either a single integer start value or a `(lo, hi)` pair (or list) from which a random start is sampled uniformly.
+* `d`
+  Common difference: either a fixed integer >= 1 or a `(lo, hi)` pair (or list) with `lo >= 1` to sample from.
+* `length`
+  Length of the progression: either a fixed integer >= 1 or a `(lo, hi)` pair (or list) with `lo >= 1` to sample from.
+* `num_aps`
+  Number of APs to generate (default: 1).
+
+**Returns**
+
+* If `num_aps == 1`, returns a single `CombSet` representing the generated AP.
+* If `num_aps > 1`, returns a list of `CombSet` objects, each representing an arithmetic progression.
+
+**Raises**
+
+* `ValueError` if `num_aps < 1`.
+* `ValueError` if `starts` is not an `int` or a `(lo, hi)` pair.
+* `ValueError` if `d` is not an `int >= 1` or a `(lo, hi)` pair with `lo >= 1`.
+* `ValueError` if `length` is not an `int >= 1` or a `(lo, hi)` pair with `lo >= 1`.
+
+**Example**
+
+```python
+from ookami import tools
+
+# three APs with random starts in [1,10], differences in [1,5], lengths in [3,8]
+aps = tools.rand_ap((1, 10), (1, 5), (3, 8), num_aps=3)
+```
+
+---
+
+#### `rand_gp`
+
+```python
+rand_gp(
+    starts: int | tuple[int, int] | list[int],
+    r: int | tuple[int, int] | list[int],
+    length: int | tuple[int, int] | list[int],
+    num_gps: int = 1
+) -> CombSet | list[CombSet]
+```
+
+Generate random geometric progressions (GPs) as `CombSet` objects.
+
+**Parameters**
+
+* `starts`
+  Either a single integer start value or a `(lo, hi)` pair (or list) from which a random start is sampled uniformly.
+* `r`
+  Common ratio: either a fixed integer >= 1 or a `(lo, hi)` pair (or list) with `lo >= 1` to sample from.
+* `length`
+  Length of the progression: either a fixed integer >= 1 or a `(lo, hi)` pair (or list) with `lo >= 1` to sample from.
+* `num_gps`
+  Number of GPs to generate (default: 1).
+
+**Returns**
+
+* If `num_gps == 1`, returns a single `CombSet` representing the generated GP.
+* If `num_gps > 1`, returns a list of `CombSet` objects, each representing a geometric progression.
+
+**Raises**
+
+* `ValueError` if `num_gps < 1`.
+* `ValueError` if `starts` is not an `int` or a `(lo, hi)` pair.
+* `ValueError` if `r` is not an `int >= 1` or a `(lo, hi)` pair with `lo >= 1`.
+* `ValueError` if `length` is not an `int >= 1` or a `(lo, hi)` pair with `lo >= 1`.
+
+**Example**
+
+```python
+from ookami import tools
+
+# five GPs with random starts in [2,8], ratios in [2,4], lengths in [3,6]
+gps = tools.rand_gp((2, 8), (2, 4), (3, 6), num_gps=5)
+```
 
 ### Internal Helpers
 
