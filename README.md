@@ -1,6 +1,6 @@
 ![OOKAMI logo](https://github.com/algebraity/ookami/blob/main/ookami.png)
 
-# OOKAMI - v1.2.3
+# OOKAMI - v1.2.4
 
 The purpose of this project is to provide a set of tools that can be used for computations with
 subsets of the integers in additive and multiplicative combinatorics. It is designed with my own research goals

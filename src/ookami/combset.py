@@ -293,12 +293,14 @@ class CombSet():
         if isinstance(self._set, np.ndarray):
             a = self._set
         else:
-            a = np.asarray(self._set, dtype=int)
+            a = np.asarray(self._set, dtype=object)
         if a.size == 0:
             raise ValueError("self._set cannot be empty!")
-        if a.dtype != int:
-            a = a.astype(int, copy=False)
+        if a.dtype != object:
+            a = a.astype(object, copy=False)
         a = np.unique(a)
+        if a.dtype != object:
+            a = a.astype(object, copy=False)
         self._set = a
 
     def __add__(self, other: Union[CombSet, int]) -> CombSet:
