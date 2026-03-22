@@ -1,5 +1,10 @@
 ![OOKAMI logo](https://github.com/algebraity/ookami/blob/main/ookami.png)
 
+
+# NOTE: Migration from GitHub
+
+Moved to Forgejo: https://git.keimai.space/algebraity/ookami
+
 # OOKAMI - v1.2.4
 
 The purpose of this project is to provide a set of tools that can be used for computations with
