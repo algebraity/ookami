@@ -3,7 +3,7 @@
 
 # NOTE: Migration from GitHub
 
-Moved to Forgejo: https://git.keimai.space/algebraity/ookami
+All active development has been moved to Forgejo. Please check for updates and submit all issues, pull requests, etc. to this repo: https://git.keimai.space/algebraity/ookami
 
 # OOKAMI - v1.2.4
 
